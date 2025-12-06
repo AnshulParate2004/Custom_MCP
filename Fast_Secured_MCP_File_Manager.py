@@ -738,48 +738,6 @@ async def delete_text_from_file(filepath: str, position: int, length: int):
 # ============================================================================
 
 @mcp.tool()
-async def run_command(command: str, shell: bool = True):
-    """
-    Execute system commands asynchronously (pip, npm, git, etc.).
-    
-    Args:
-        command: Command string to execute
-        shell: Run through shell (default: True)
-    
-    Returns:
-        Formatted output with stdout, stderr, and return code
-    
-    Examples:
-        run_command("pip install langchain")
-        run_command("python --version")
-    """
-    try:
-        process = await asyncio.create_subprocess_shell(
-            command,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-            shell=shell
-        )
-        
-        stdout, stderr = await process.communicate()
-        stdout_text = stdout.decode('utf-8', errors='ignore') if stdout else ""
-        stderr_text = stderr.decode('utf-8', errors='ignore') if stderr else ""
-        
-        output = f"Command: {command}\n"
-        output += f"Return Code: {process.returncode}\n"
-        output += f"Success: {process.returncode == 0}\n\n"
-        
-        if stdout_text:
-            output += f"Output:\n{stdout_text}\n"
-        if stderr_text:
-            output += f"Errors/Warnings:\n{stderr_text}\n"
-        
-        return output
-        
-    except Exception as e:
-        return f"❌ Error executing command: {str(e)}"
-
-@mcp.tool()
 async def open_in_vscode(filepath: str):
     """
     Launch file in VS Code editor.
