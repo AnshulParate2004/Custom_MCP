@@ -1,0 +1,18 @@
+[project]
+name = "mcp-server"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "browser-use>=0.10.1",
+    "fastmcp>=2.13.3",
+    "mcp>=1.22.0",
+    "python-dotenv>=1.2.1",
+    "typing-extensions>=4.15.0",
+]
+
+[project.scripts]
+mcp-file-manager = "MCP_File_Manager:main"
+mcp-file-manager-secure = "Fast_Secured_MCP_File_Manager:main"
+browser-automation = "Browser_Automation:main"

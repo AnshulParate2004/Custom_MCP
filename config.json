@@ -1,0 +1,34 @@
+{
+    "mcpServers": {
+        // "MCP_File_Manager": {
+        //     "command": "C:/Users/KAIZEN/.local/bin/uv.exe",
+        //     "args": [
+        //         "run",
+        //         "--directory",
+        //         "D:/MCP_Server",
+        //         "python",
+        //         "MCP_File_Manager.py"
+        //     ]
+        // },
+        "Browser_Automation": {
+            "command": "C:/Users/KAIZEN/.local/bin/uv.exe",
+            "args": [
+                "run",
+                "--directory",
+                "D:/MCP_Server",
+                "python",
+                "Browser_Automation.py"
+            ]
+        },
+        "MCP_File_Manager_Secure": {
+            "command": "C:/Users/KAIZEN/.local/bin/uv.exe",
+            "args": [
+                "run",
+                "--directory",
+                "D:/MCP_Server",
+                "python",
+                "Fast_Secured_MCP_File_Manager.py"
+            ]
+        }
+    }
+}
