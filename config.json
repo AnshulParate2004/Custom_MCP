@@ -1,13 +1,13 @@
 {
     "mcpServers": {
-        "Browser_Automation": {
+        "Browser_Automation_Fast": {
             "command": "C:/Users/KAIZEN/.local/bin/uv.exe",
             "args": [
                 "run",
                 "--directory",
                 "D:/MCP_Server",
                 "python",
-                "Browser_Automation.py"
+                "Browser_Automation_Fast.py"
             ]
         },
         "MCP_File_Manager_Secure": {
