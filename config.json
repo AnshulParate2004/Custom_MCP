@@ -29,6 +29,19 @@
                 "python",
                 "command_executor_mcp.py"
             ]
+        },
+        "Browser_Agent":{
+            "command":"C:/Users/KAIZEN/.local/bin/uv.exe",
+            "args":[
+                "run",
+                "--directory",
+                "D:/MCP_Server",
+                "python",
+                "Browser_Agent.py"
+            ],
+            "env": {
+                "BROWSER_USE_API_KEY":"xxxxxxxxxxxxxxxxxxxxxxxx"
+            }
         }
     }
 }
