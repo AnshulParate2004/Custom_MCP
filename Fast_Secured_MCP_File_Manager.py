@@ -28,6 +28,9 @@ ALLOWED_DIRECTORIES = [
     r"D:\MCP_Server",
     r"D:\Projects",
     r"D:\Projects_Main",
+    r"D:\Learning",
+    r"D:\Jayraj",
+    r"D:\Internship",
     os.path.expanduser("~"),  # User home directory
 ]
 
@@ -254,6 +257,147 @@ async def append_to_file(filepath: str, content: str, position: str = "end", mar
         return f"{str(e)}"
     except Exception as e:
         return f"Error: {str(e)}"
+
+
+@mcp.tool()
+async def create_files_and_directories_recursive(base_path: str, structure: str):
+    """
+    Create multiple files and directories recursively from a JSON structure (SECURE).
+    
+    Args:
+        base_path: Root directory where structure will be created
+        structure: JSON string defining the structure to create
+    
+    Structure Format:
+        {
+            "directories": ["dir1", "dir2/subdir", "dir3/sub1/sub2"],
+            "files": [
+                {"path": "file1.txt", "content": "Hello"},
+                {"path": "dir1/file2.py", "content": "print('test')"}
+            ]
+        }
+    
+    Returns:
+        JSON report of created items and any errors
+    
+    Examples:
+        create_files_and_directories_recursive("D:/project", '{"directories": ["src", "tests"], "files": [{"path": "src/main.py", "content": "print(\\"Hello\\")"}]}')
+    """
+    try:
+        valid_base = validate_path(base_path)
+        
+        # Parse the structure JSON
+        try:
+            struct = json.loads(structure)
+        except json.JSONDecodeError as e:
+            return json.dumps({
+                "error": f"Invalid JSON structure: {str(e)}"
+            }, indent=2)
+        
+        created_dirs = []
+        created_files = []
+        errors = []
+        
+        # Create base directory if it doesn't exist
+        if not os.path.exists(valid_base):
+            try:
+                os.makedirs(valid_base)
+                created_dirs.append(valid_base)
+            except Exception as e:
+                return json.dumps({
+                    "error": f"Failed to create base directory: {str(e)}"
+                }, indent=2)
+        
+        # Create directories
+        if "directories" in struct:
+            for dir_path in struct["directories"]:
+                full_path = os.path.join(valid_base, dir_path)
+                try:
+                    validated_path = validate_path(full_path)
+                    os.makedirs(validated_path, exist_ok=True)
+                    created_dirs.append(dir_path)
+                except PermissionError as e:
+                    errors.append({
+                        "type": "directory",
+                        "path": dir_path,
+                        "error": str(e)
+                    })
+                except Exception as e:
+                    errors.append({
+                        "type": "directory",
+                        "path": dir_path,
+                        "error": f"Error: {str(e)}"
+                    })
+        
+        # Create files
+        if "files" in struct:
+            for file_info in struct["files"]:
+                if not isinstance(file_info, dict) or "path" not in file_info:
+                    errors.append({
+                        "type": "file",
+                        "path": "unknown",
+                        "error": "Invalid file structure - must have 'path' key"
+                    })
+                    continue
+                
+                file_path = file_info["path"]
+                file_content = file_info.get("content", "")
+                
+                full_path = os.path.join(valid_base, file_path)
+                
+                try:
+                    validated_path = validate_path(full_path)
+                    
+                    # Create parent directory if it doesn't exist
+                    parent_dir = os.path.dirname(validated_path)
+                    if parent_dir and not os.path.exists(parent_dir):
+                        os.makedirs(parent_dir)
+                    
+                    # Write the file
+                    with open(validated_path, 'w', encoding='utf-8') as f:
+                        f.write(file_content)
+                    
+                    file_size = os.path.getsize(validated_path)
+                    created_files.append({
+                        "path": file_path,
+                        "size": format_size(file_size)
+                    })
+                    
+                except PermissionError as e:
+                    errors.append({
+                        "type": "file",
+                        "path": file_path,
+                        "error": str(e)
+                    })
+                except Exception as e:
+                    errors.append({
+                        "type": "file",
+                        "path": file_path,
+                        "error": f"Error: {str(e)}"
+                    })
+        
+        result = {
+            "base_path": valid_base,
+            "created_directories": len(created_dirs),
+            "created_files": len(created_files),
+            "errors": len(errors),
+            "directories": created_dirs,
+            "files": created_files
+        }
+        
+        if errors:
+            result["error_details"] = errors
+        
+        return json.dumps(result, indent=2, ensure_ascii=False)
+        
+    except PermissionError as e:
+        return json.dumps({
+            "error": str(e)
+        }, indent=2)
+    except Exception as e:
+        return json.dumps({
+            "error": f"Error: {str(e)}"
+        }, indent=2)
 
 @mcp.tool()
 async def list_files(directory: str = ".", pattern: str = "*"):
@@ -793,6 +937,106 @@ async def list_allowed_directories():
         result += f"{i}. {directory}\n"
     result += "\nOnly files within these directories can be accessed."
     return result
+
+
+# ============================================================================
+# DISK ANALYSIS TOOLS
+# ============================================================================
+
+@mcp.tool()
+async def get_directory_size(directory: str, depth: int = 1, min_size_mb: float = 0):
+    """
+    Recursively calculate the total size of a directory and its subdirectories (SECURE).
+    
+    Args:
+        directory: Directory path to analyze
+        depth: How many levels deep to report (default: 1 = immediate children only)
+        min_size_mb: Only show entries larger than this many MB (default: 0 = show all)
+    
+    Returns:
+        Sorted report of subdirectory sizes with totals
+    
+    Examples:
+        get_directory_size("C:/")
+        get_directory_size("C:/Program Files", depth=2, min_size_mb=100)
+        get_directory_size("C:/Users/KAIZEN", depth=1, min_size_mb=50)
+    """
+    try:
+        valid_path = validate_path(directory)
+
+        def get_size_recursive(path: str) -> int:
+            """Walk entire tree and sum all file sizes."""
+            total = 0
+            try:
+                with os.scandir(path) as it:
+                    for entry in it:
+                        try:
+                            if entry.is_file(follow_symlinks=False):
+                                total += entry.stat(follow_symlinks=False).st_size
+                            elif entry.is_dir(follow_symlinks=False):
+                                total += get_size_recursive(entry.path)
+                        except (PermissionError, OSError):
+                            pass
+            except (PermissionError, OSError):
+                pass
+            return total
+
+        def scan_depth(path: str, current_depth: int, max_depth: int):
+            """Scan directory up to max_depth, return list of (path, size)."""
+            results = []
+            try:
+                with os.scandir(path) as it:
+                    for entry in it:
+                        try:
+                            if entry.is_dir(follow_symlinks=False):
+                                size = get_size_recursive(entry.path)
+                                results.append((entry.path, entry.name, size, "DIR"))
+                            elif entry.is_file(follow_symlinks=False):
+                                size = entry.stat(follow_symlinks=False).st_size
+                                results.append((entry.path, entry.name, size, "FILE"))
+                        except (PermissionError, OSError):
+                            pass
+            except (PermissionError, OSError):
+                pass
+            return results
+
+        # Scan immediate children with full recursive size
+        entries = scan_depth(valid_path, 0, depth)
+
+        # Filter by min size
+        min_bytes = min_size_mb * 1024 * 1024
+        entries = [e for e in entries if e[2] >= min_bytes]
+
+        # Sort by size descending
+        entries.sort(key=lambda x: x[2], reverse=True)
+
+        # Calculate total
+        total_size = get_size_recursive(valid_path)
+
+        # Format output
+        lines = []
+        lines.append(f"Disk Usage Report: {valid_path}")
+        lines.append(f"{'='*65}")
+        lines.append(f"{'Type':<6} {'Size':>12}  {'% of Total':>10}  Name")
+        lines.append(f"{'-'*65}")
+
+        for (full_path, name, size, entry_type) in entries:
+            pct = (size / total_size * 100) if total_size > 0 else 0
+            lines.append(f"[{entry_type:<4}] {format_size(size):>12}  {pct:>9.1f}%  {name}")
+
+        lines.append(f"{'-'*65}")
+        lines.append(f"{'TOTAL':>6} {format_size(total_size):>12}  {'100.0%':>10}  {os.path.basename(valid_path) or valid_path}")
+
+        if min_size_mb > 0:
+            lines.append(f"\n(Showing only items >= {min_size_mb} MB)")
+
+        return "\n".join(lines)
+
+    except PermissionError as e:
+        return f"{str(e)}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
 
 # ============================================================================
 # RUN SERVER
