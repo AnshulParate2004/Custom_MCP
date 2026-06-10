@@ -1,7 +1,7 @@
 # Custom MCP Browser Automation — MASTER PLAN
 
 > **Single source of truth.** All sub-documents derive from this file.  
-> **Current iteration:** 1  
+> **Current iteration:** 2  
 > **Last updated:** 2026-06-11  
 > **Status:** Documentation complete; code implementation pending
 
@@ -36,7 +36,8 @@ Replace **browser-use** (vendor SDK + API key) with an **owned** stack:
 | PDF (tech) | `tech-plan/tech-plan.pdf` | Printable architecture |
 | PDF (flow) | `flow-logic/browser-flow-framework.pdf` | Printable flows |
 | Delivery workflow | `DOCUMENT_DELIVERY_PLAN.md` | LaTeX/PNG/PDF pipeline |
-| Schemas | `tech-plan/schemas/*.json` | Config examples |
+| Security | `SECURITY.md` | Threat model, secrets |
+| Test plan | `TEST_PLAN.md` | Unit, MCP, agent, smoke tests |
 
 ---
 
@@ -119,6 +120,14 @@ Improve this plan recursively until marginal gain < threshold. After each loop:
 2. Append entry to `PLAN_ITERATION_LOG.md`
 3. Sync sub-documents if affected
 4. Git commit + push
+
+**Current iteration:** 2
+
+---
+
+## 10. Security & testing
+
+See [SECURITY.md](SECURITY.md) and [TEST_PLAN.md](TEST_PLAN.md).
 
 ---
 
