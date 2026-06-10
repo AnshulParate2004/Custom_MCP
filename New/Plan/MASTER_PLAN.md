@@ -1,9 +1,9 @@
 # Custom MCP Browser Automation — MASTER PLAN
 
 > **Single source of truth.** All sub-documents derive from this file.  
-> **Current iteration:** 4  
+> **Current iteration:** 8 (plan complete)  
 > **Last updated:** 2026-06-11  
-> **Status:** Documentation complete; code implementation pending
+> **Status:** Plan docs complete — ready for code implementation per IMPLEMENTATION_CHECKLIST.md
 
 ---
 

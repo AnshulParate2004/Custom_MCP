@@ -297,6 +297,30 @@ AGENT_MAX_STEPS=25
 
 ---
 
+## 13. Security
+
+See [../SECURITY.md](../SECURITY.md) — threat model, secrets, MCP isolation.
+
+---
+
+## 14. Testing
+
+See [../TEST_PLAN.md](../TEST_PLAN.md) — unit, MCP, agent, smoke tests.
+
+---
+
+## 15. Architecture decisions
+
+See [../adr/README.md](../adr/README.md) — ADR-001 through ADR-005.
+
+---
+
+## 16. DOM extractor
+
+See [schemas/DOM_EXTRACTOR_SPEC.md](schemas/DOM_EXTRACTOR_SPEC.md) — in-page JS specification.
+
+---
+
 ## Appendix — LaTeX PDF build
 
 When ready for PDF output (matching Renewal-Upsell-Advisor style):

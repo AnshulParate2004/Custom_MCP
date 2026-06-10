@@ -218,16 +218,19 @@ if (Test-Path "tech-plan.pdf") {
 
 | Item | Status |
 |------|--------|
-| Mermaid diagram sources | Done — `diagrams/README.md` (both folders) |
-| LLM image prompts | Done — `diagrams/IMAGE_PROMPTS.md` (both folders) |
-| Markdown drafts | Done — `TECHNICAL_PLAN.md`, `FLOW_LOGIC.md` |
-| Config schema content | Done — `schemas/SCHEMAS.md` |
-| PNG images (16) | **Pending** — generate via LLM prompts |
-| `tech-plan.tex` | **Pending** — Agent mode execution |
-| `browser-flow-framework.tex` | **Pending** — Agent mode execution |
-| `build.ps1` (×2) | **Pending** — Agent mode execution |
-| `.json` schema files | **Pending** — Agent mode execution |
-| **PDF output** | **Pending** — after images + LaTeX + pdflatex |
+| Mermaid diagram sources | **Done** |
+| LLM image prompts | **Done** |
+| Markdown drafts | **Done** |
+| Config schema content | **Done** |
+| PNG images (16) | **Done** |
+| `tech-plan.tex` | **Done** |
+| `browser-flow-framework.tex` | **Done** |
+| `build.ps1` (×2) | **Done** |
+| `.json` schema files | **Done** |
+| **PDF output** | **Done** |
+| MASTER_PLAN + ADRs + checklists | **Done** (loops 1–8) |
+
+**Next phase:** Code implementation per [IMPLEMENTATION_CHECKLIST.md](IMPLEMENTATION_CHECKLIST.md)
 
 ---
 
