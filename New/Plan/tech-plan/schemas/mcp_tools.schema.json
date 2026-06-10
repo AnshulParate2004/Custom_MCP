@@ -1,0 +1,5 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Browser MCP Tools",
+  "tools": ["browser_start", "browser_close", "browser_navigate", "browser_get_state", "browser_get_content", "browser_click", "browser_type", "browser_scroll", "browser_execute_javascript"]
+}
