@@ -1,0 +1,13 @@
+﻿{
+  "mcpServers": {
+    "Browser_Automation": {
+      "command": "uv",
+      "args": ["run", "--directory", "D:/Custom_MCP", "python", "browser_mcp.py"]
+    },
+    "Browser_Agent": {
+      "command": "uv",
+      "args": ["run", "--directory", "D:/Custom_MCP", "python", "browser_agent/mcp_server.py"],
+      "env": { "LITELLM_MODEL": "openai/gpt-4o", "AGENT_MAX_STEPS": "25" }
+    }
+  }
+}

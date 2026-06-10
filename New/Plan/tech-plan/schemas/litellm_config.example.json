@@ -1,0 +1,9 @@
+﻿{
+  "default_model": "openai/gpt-4o",
+  "agent_max_steps": 25,
+  "examples": {
+    "openai": { "model": "openai/gpt-4o", "env_key": "OPENAI_API_KEY" },
+    "anthropic": { "model": "anthropic/claude-sonnet-4-6", "env_key": "ANTHROPIC_API_KEY" },
+    "ollama": { "model": "ollama/llama3" }
+  }
+}

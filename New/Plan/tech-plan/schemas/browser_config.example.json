@@ -1,0 +1,12 @@
+﻿{
+  "browser": {
+    "headless": false,
+    "timeout_ms": 30000,
+    "state_cache_ttl_seconds": 2,
+    "downloads_path": "~/Downloads/browser-mcp"
+  },
+  "state_extraction": {
+    "max_elements": 200,
+    "interactive_selectors": ["a[href]", "button", "input", "textarea", "select", "[role=button]"]
+  }
+}

@@ -1,0 +1,56 @@
+﻿\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2cm,top=2.2cm,bottom=2.2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{helvet}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{pdflscape}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{needspace}
+\setlength{\parskip}{0.45em plus 0.1em minus 0.05em}
+\setlength{\parindent}{0pt}
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{brandblue}{HTML}{0c3472}
+\definecolor{brandlight}{HTML}{c8d7eb}
+\definecolor{textgray}{HTML}{475569}
+\hypersetup{colorlinks=true,linkcolor=brandblue,urlcolor=brandblue,pdftitle={Custom MCP Flow Framework},pdfauthor={Custom MCP}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{textgray}{Custom MCP --- Flow Framework}}
+\fancyfoot[C]{\small\textcolor{textgray}{\thepage}}
+\titleformat{\section}{\Large\bfseries\color{brandblue}}{}{0em}{}[\titlerule]
+\newcommand{\docfig}[5]{\begin{figure}[#1]\centering\adjustbox{max width=\textwidth,max height=#2,center}{\includegraphics{#3}}\caption{#4}\label{#5}\end{figure}}
+\newcommand{\docfiglandscape}[4]{\clearpage\begin{landscape}\thispagestyle{fancy}\begin{figure}[H]\centering\adjustbox{max width=0.92\linewidth,max height=0.75\textheight,center}{\includegraphics{#1}}\caption{#2}\label{#3}\end{figure}\end{landscape}}
+\newcommand{\makecover}{\thispagestyle{empty}\begin{center}\vspace*{1.5cm}{\color{brandblue}\rule{\textwidth}{2pt}}\\[0.8cm]{\fontsize{28}{34}\selectfont\bfseries\color{brandblue} Custom MCP}\\[0.3cm]{\large Browser Flow and Operations Framework}\\[1.2cm]{\large \today}\vfill{\color{brandblue}\rule{\textwidth}{2pt}}\end{center}\newpage}
+\begin{document}
+\makecover
+\tableofcontents
+\newpage
+\section{Dual-Path Overview}
+Path A: Cursor LLM orchestrates MCP tools. Path B: Custom LangGraph agent with LiteLLM.
+\docfig{htbp}{0.38\textheight}{images/cbm-flow-dual-path.png}{Dual-path model.}{fig:dual}
+\section{Path A --- Cursor Flow}
+\docfiglandscape{images/cbm-flow-cursor-sequence.png}{Cursor MCP sequence.}{fig:cursor}
+\section{Path B --- Agent Flow}
+\docfiglandscape{images/cbm-flow-agent-sequence.png}{Custom agent sequence.}{fig:agent}
+\docfig{htbp}{0.38\textheight}{images/cbm-flow-agent-decisions.png}{Agent decision loop.}{fig:decisions}
+\section{Element Index Resolution}
+\docfig{htbp}{0.36\textheight}{images/cbm-flow-element-index.png}{Index resolution flow.}{fig:index}
+\section{Error Handling}
+\docfig{htbp}{0.36\textheight}{images/cbm-flow-error-handling.png}{Error routing.}{fig:errors}
+\section{Provider Switch}
+\docfig{htbp}{0.28\textheight}{images/cbm-flow-provider-switch.png}{LiteLLM provider switch.}{fig:provider}
+\section{Migration}
+\docfig{htbp}{0.40\textheight}{images/cbm-flow-migration.png}{Migration from browser-use.}{fig:migration}
+\end{document}

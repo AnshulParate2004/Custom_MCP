@@ -1,0 +1,73 @@
+﻿\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2cm,top=2.2cm,bottom=2.2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{helvet}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{pdflscape}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{needspace}
+\usepackage{array}
+\usepackage{listings}
+\setlength{\parskip}{0.45em plus 0.1em minus 0.05em}
+\setlength{\parindent}{0pt}
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{brandblue}{HTML}{0c3472}
+\definecolor{brandlight}{HTML}{c8d7eb}
+\definecolor{textgray}{HTML}{475569}
+\hypersetup{colorlinks=true,linkcolor=brandblue,urlcolor=brandblue,pdftitle={Custom MCP Technical Architecture},pdfauthor={Custom MCP}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{textgray}{Custom MCP --- Technical Architecture}}
+\fancyhead[R]{\small\textcolor{textgray}{Engineering Spec}}
+\fancyfoot[C]{\small\textcolor{textgray}{\thepage}}
+\titleformat{\section}{\Large\bfseries\color{brandblue}}{}{0em}{}[\titlerule]
+\lstset{basicstyle=\ttfamily\small,breaklines=true,frame=single,backgroundcolor=\color{brandlight!30}}
+\newcommand{\docfig}[5]{\begin{figure}[#1]\centering\adjustbox{max width=\textwidth,max height=#2,center}{\includegraphics{#3}}\caption{#4}\label{#5}\end{figure}}
+\newcommand{\docfiglandscape}[4]{\clearpage\begin{landscape}\thispagestyle{fancy}\begin{figure}[H]\centering\adjustbox{max width=0.92\linewidth,max height=0.75\textheight,center}{\includegraphics{#1}}\caption{#2}\label{#3}\end{figure}\end{landscape}}
+\newcommand{\makecover}{\thispagestyle{empty}\begin{center}\vspace*{1.5cm}{\color{brandblue}\rule{\textwidth}{2pt}}\\[0.8cm]{\fontsize{28}{34}\selectfont\bfseries\color{brandblue} Custom MCP}\\[0.3cm]{\large Browser Automation --- Technical Architecture Plan}\\[1.2cm]{\large Playwright \textperiodcentered\ MCP \textperiodcentered\ LangChain \textperiodcentered\ LiteLLM}\\[2cm]{\large \today}\vfill{\color{brandblue}\rule{\textwidth}{2pt}}\end{center}\newpage}
+\begin{document}
+\makecover
+\tableofcontents
+\newpage
+\section{Executive Summary}
+Build a self-owned browser automation platform: Playwright engine, MCP tools for Cursor, LangGraph agent with langchain-litellm. No browser-use SDK.
+\begin{tabular}{@{}ll@{}}
+\toprule
+Requirement & Target \\
+\midrule
+Cold start & $<$3s \\
+get\_state cached & $<$100ms \\
+Agent max steps & 25 \\
+\bottomrule
+\end{tabular}
+\section{Platform Architecture}
+\docfiglandscape{images/cbm-tech-platform-architecture.png}{Five-layer platform architecture.}{fig:platform}
+\section{MCP Tool Data Flow}
+\docfig{htbp}{0.38\textheight}{images/cbm-mcp-tool-data-flow.png}{MCP tool routing from Cursor to Playwright.}{fig:mcpflow}
+\section{Package Layout}
+\docfig{htbp}{0.40\textheight}{images/cbm-package-layout.png}{Target package tree.}{fig:package}
+\section{Browser Core}
+\docfig{htbp}{0.42\textheight}{images/cbm-page-state-pipeline.png}{Page state extraction pipeline.}{fig:state}
+\section{MCP Deployment}
+\docfig{htbp}{0.36\textheight}{images/cbm-mcp-deployment.png}{MCP wiring via config.json.}{fig:deploy}
+\section{Custom Agent}
+\docfig{htbp}{0.40\textheight}{images/cbm-langgraph-react-agent.png}{LangGraph ReAct loop.}{fig:react}
+\docfig{htbp}{0.34\textheight}{images/cbm-litellm-providers.png}{LiteLLM multi-provider hub.}{fig:litellm}
+\section{Session Lifecycle}
+\docfig{htbp}{0.30\textheight}{images/cbm-session-lifecycle.png}{Session state machine.}{fig:session}
+\section{Implementation Phases}
+Phase 1 browser core, 2 browser\_mcp.py, 3 browser\_agent, 4 config, 5 remove browser-use, 6 smoke test.
+\end{document}

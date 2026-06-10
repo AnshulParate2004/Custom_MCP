@@ -1,0 +1,6 @@
+\contentsline {section}{\numberline {1}Dual-Path Overview}{3}{section.1}%
+\contentsline {section}{\numberline {2}Path A --- Cursor Flow}{3}{section.2}%
+\contentsline {section}{\numberline {3}Element Index Resolution}{7}{section.3}%
+\contentsline {section}{\numberline {4}Error Handling}{7}{section.4}%
+\contentsline {section}{\numberline {5}Provider Switch}{7}{section.5}%
+\contentsline {section}{\numberline {6}Migration}{7}{section.6}%
