@@ -8,9 +8,7 @@ Changelog for recursive plan improvements. One git commit per loop.
 | 2 | 2026-06-11 | Add SECURITY.md and TEST_PLAN.md | ac994f3 |
 | 3 | 2026-06-11 | Add ADR folder and MCP tool JSON schema | 2ef2467 |
 | 4 | 2026-06-11 | Add IMPLEMENTATION_CHECKLIST and RISK_REGISTER | a533d78 |
-| 5 | 2026-06-11 | Sync DOCUMENT_DELIVERY_PLAN status, DOM extractor spec | pending |
-| 6 | 2026-06-11 | Rewrite README index, cross-link TECHNICAL_PLAN | pending |
-| 7 | 2026-06-11 | Mark MASTER_PLAN iteration 8 complete, plateau reached | pending |
+| 5-7 | 2026-06-11 | Sync delivery plan, DOM spec, README, mark plan complete | d00b339 |
 
 ## Stop condition (met at loop 7)
 
