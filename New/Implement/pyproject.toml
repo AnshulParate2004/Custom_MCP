@@ -1,0 +1,33 @@
+[project]
+name = "custom-mcp"
+version = "0.2.0"
+description = "Custom MCP browser automation with Playwright, LangChain, and LiteLLM"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastmcp>=2.13.3",
+    "langchain>=0.3.0",
+    "langchain-core>=0.3.0",
+    "langchain-litellm>=0.2.0",
+    "langgraph>=0.2.0",
+    "litellm>=1.55.0",
+    "mcp>=1.22.0",
+    "playwright>=1.49.0",
+    "python-dotenv>=1.2.1",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[project.scripts]
+browser-mcp = "browser_mcp:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+asyncio_mode = "auto"
+markers = [
+    "live_llm: tests that call a real LLM API",
+]

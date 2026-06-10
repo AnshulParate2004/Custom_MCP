@@ -47,7 +47,7 @@ Replace **browser-use** (vendor SDK + API key) with an **owned** stack:
 ## 3. Target codebase layout
 
 ```
-D:/Custom_MCP/
+D:/Custom_MCP/New/Implement/
   browser/
     __init__.py
     config.py
@@ -100,7 +100,7 @@ D:/Custom_MCP/
 | 1 | `browser/` core | navigate + get_state works |
 | 2 | `browser_mcp.py` | Cursor can start browser |
 | 3 | `browser_agent/` | run_browser_task completes search |
-| 4 | Config migration | config.json → D:/Custom_MCP |
+| 4 | Config migration | config.json → D:/Custom_MCP/New/Implement |
 | 5 | Remove browser-use | pyproject clean |
 | 6 | Smoke test | Both paths on same URL |
 
