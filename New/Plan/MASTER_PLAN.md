@@ -1,7 +1,7 @@
 # Custom MCP Browser Automation — MASTER PLAN
 
 > **Single source of truth.** All sub-documents derive from this file.  
-> **Current iteration:** 2  
+> **Current iteration:** 4  
 > **Last updated:** 2026-06-11  
 > **Status:** Documentation complete; code implementation pending
 
@@ -38,6 +38,9 @@ Replace **browser-use** (vendor SDK + API key) with an **owned** stack:
 | Delivery workflow | `DOCUMENT_DELIVERY_PLAN.md` | LaTeX/PNG/PDF pipeline |
 | Security | `SECURITY.md` | Threat model, secrets |
 | Test plan | `TEST_PLAN.md` | Unit, MCP, agent, smoke tests |
+| ADRs | `adr/README.md` | Architecture decisions |
+| Implementation | `IMPLEMENTATION_CHECKLIST.md` | File-by-file build checklist |
+| Risks | `RISK_REGISTER.md` | Risk matrix |
 
 ---
 
