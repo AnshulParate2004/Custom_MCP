@@ -69,5 +69,26 @@ Agent max steps & 25 \\
 \section{Session Lifecycle}
 \docfig{htbp}{0.30\textheight}{images/cbm-session-lifecycle.png}{Session state machine.}{fig:session}
 \section{Implementation Phases}
-Phase 1 browser core, 2 browser\_mcp.py, 3 browser\_agent, 4 config, 5 remove browser-use, 6 smoke test.
+Phase 1 \texttt{browser/} core, 2 \texttt{browser\_mcp.py}, 3 \texttt{browser\_agent/}, 4 config, 5 tests, 6 production hardening.
+
+\section{Implementation Root}
+All code lives at \texttt{D:/Custom\_MCP/New/Implement}:
+\begin{itemize}[noitemsep]
+\item \texttt{browser/} --- session, state, actions, security, audit, guards
+\item \texttt{browser\_mcp.py} --- Path A MCP (9 tools)
+\item \texttt{browser\_agent/} --- Path B LangGraph agent
+\item \texttt{setup.ps1} --- one-command install + test
+\item \texttt{cursor-mcp.example.json} --- Cursor MCP template
+\end{itemize}
+
+\section{Security \& Production}
+Implemented per \texttt{Plan/SECURITY.md}:
+\begin{itemize}[noitemsep]
+\item URL validation: block \texttt{file://}, localhost; optional \texttt{BROWSER\_ALLOWED\_HOSTS}
+\item JS guardrails: length limit, block \texttt{eval}/storage access patterns
+\item \texttt{STALE\_STATE} guard: \texttt{browser\_get\_state} required before click/type
+\item Append-only audit log: \texttt{audit.jsonl} under downloads path
+\item Navigate retries via \texttt{BROWSER\_NAVIGATE\_RETRIES}
+\end{itemize}
+CI: GitHub Actions runs \texttt{pytest} on push/PR.
 \end{document}

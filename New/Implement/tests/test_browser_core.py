@@ -10,6 +10,8 @@ def test_settings_defaults():
     settings = get_settings()
     assert settings.agent_max_steps == 25
     assert "gpt" in settings.litellm_model or "openai" in settings.litellm_model
+    assert settings.block_localhost is True
+    assert settings.audit_enabled is True
 
 
 def test_no_session_error_code():

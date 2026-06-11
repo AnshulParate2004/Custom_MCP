@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 from typing import TYPE_CHECKING
 
+from browser.audit import log_event
 from browser.config import get_settings
 from browser.errors import BrowserError, NoSessionError
 
@@ -47,6 +48,7 @@ async def start_session(headless: bool | None = None) -> dict:
             _pages = [_page]
 
             settings.downloads_path.mkdir(parents=True, exist_ok=True)
+            log_event("session_start", {"headless": use_headless})
 
             return {
                 "success": True,
@@ -60,7 +62,10 @@ async def start_session(headless: bool | None = None) -> dict:
 
 async def close_session() -> dict:
     async with _lock:
+        was_active = is_active()
         await _cleanup()
+        if was_active:
+            log_event("session_close", {})
         return {"success": True, "message": "Browser closed"}
 
 

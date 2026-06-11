@@ -53,4 +53,10 @@ Path A: Cursor LLM orchestrates MCP tools. Path B: Custom LangGraph agent with L
 \docfig{htbp}{0.28\textheight}{images/cbm-flow-provider-switch.png}{LiteLLM provider switch.}{fig:provider}
 \section{Migration}
 \docfig{htbp}{0.40\textheight}{images/cbm-flow-migration.png}{Migration from browser-use.}{fig:migration}
+
+\section{State Guard (Enforced)}
+Path A and Path B enforce \texttt{STALE\_STATE} in code (\texttt{browser/guards.py}): \texttt{browser\_click} and \texttt{browser\_type} fail unless \texttt{browser\_get\_state} ran after the last navigation or mutation. Agent system prompt mirrors the same rule.
+
+\section{Implementation Root}
+Code: \texttt{D:/Custom\_MCP/New/Implement}. Setup: \texttt{./setup.ps1}. Cursor MCP: copy \texttt{cursor-mcp.example.json}.
 \end{document}

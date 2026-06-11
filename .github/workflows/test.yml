@@ -1,0 +1,33 @@
+name: Test
+
+on:
+  push:
+    paths:
+      - "New/Implement/**"
+      - ".github/workflows/test.yml"
+  pull_request:
+    paths:
+      - "New/Implement/**"
+
+defaults:
+  run:
+    working-directory: New/Implement
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --extra test
+
+      - name: Install Playwright Chromium
+        run: uv run python -m playwright install chromium --with-deps
+
+      - name: Run tests
+        run: uv run pytest tests/ -v --tb=short -m "not live_llm"

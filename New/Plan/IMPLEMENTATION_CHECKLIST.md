@@ -1,67 +1,59 @@
 # Implementation Checklist
 
-**Parent:** [MASTER_PLAN.md](./MASTER_PLAN.md) | **Iteration:** 4
+**Parent:** [MASTER_PLAN.md](./MASTER_PLAN.md) | **Status:** Complete (2026-06-11)
 
-File-by-file implementation spec. Check off during code phase.
+File-by-file implementation spec. All items verified in `New/Implement`.
 
 ---
 
 ## Phase 1 — `browser/` core
 
-- [ ] **`browser/config.py`** — load env: `BROWSER_HEADLESS`, `BROWSER_TIMEOUT_MS`, `STATE_CACHE_TTL`
-- [ ] **`browser/session.py`**
-  - [ ] `_playwright`, `_browser`, `_context`, `_page` singletons
-  - [ ] `async def start(headless: bool) -> dict`
-  - [ ] `async def close() -> dict`
-  - [ ] `async def get_page() -> Page` (raise `NoSessionError` if idle)
-- [ ] **`browser/state.py`**
-  - [ ] In-page JS scanner for interactive elements
-  - [ ] `_last_snapshot: dict` + cache timestamp
-  - [ ] `async def get_state(include_screenshot, force_refresh) -> dict`
-  - [ ] `def resolve_index(index: int) -> ElementHandle info`
-- [ ] **`browser/actions.py`**
-  - [ ] `navigate`, `click`, `type_text`, `scroll`, `evaluate`, `screenshot`, `get_text_content`
-  - [ ] Invalidate state cache after mutating actions
+- [x] **`browser/config.py`** — env: headless, timeouts, allowlist, audit, agent settings
+- [x] **`browser/session.py`** — singleton lifecycle, audit on start/close
+- [x] **`browser/state.py`** — DOM extractor, cache, guards integration
+- [x] **`browser/actions.py`** — navigate, click, type, scroll, evaluate, get_text_content
+- [x] **`browser/security.py`** — URL + JS validation
+- [x] **`browser/audit.py`** — JSONL audit log
+- [x] **`browser/guards.py`** — STALE_STATE enforcement
 
 ---
 
 ## Phase 2 — `browser_mcp.py`
 
-- [ ] FastMCP or mcp Server with 9 tools (match `mcp_tools.schema.json`)
-- [ ] JSON string responses for all tools
-- [ ] `if __name__ == "__main__"` stdio entry
+- [x] FastMCP with 9 tools (match `mcp_tools.schema.json`)
+- [x] JSON string responses, stdio entry
 
 ---
 
 ## Phase 3 — `browser_agent/`
 
-- [ ] **`tools.py`** — LangChain `@tool` wrappers calling `browser.actions`
-- [ ] **`agent.py`**
-  - [ ] `create_react_agent(llm, tools)`
-  - [ ] System prompt with rules from FLOW_LOGIC.md
-  - [ ] `async def run_task(task: str, model: str | None) -> str`
-  - [ ] `try/finally` → `browser.close()`
-- [ ] **`mcp_server.py`** — `@mcp.tool run_browser_task`
+- [x] **`tools.py`** — LangChain wrappers
+- [x] **`agent.py`** — create_react_agent, system prompt, finally close, API key check
+- [x] **`mcp_server.py`** — `run_browser_task`
 
 ---
 
 ## Phase 4 — Config & deps
 
-- [ ] Update `pyproject.toml` — remove browser-use, add playwright/langchain/litellm
-- [ ] Update `config.json` paths to `D:/Custom_MCP`
-- [ ] Add `.env.example`
-- [ ] Deprecate `Browser_Agent.py`, `Browser_Automation_Fast.py`
+- [x] `pyproject.toml` — playwright, langchain, litellm, fastmcp
+- [x] `config.json` paths → `D:/Custom_MCP/New/Implement`
+- [x] `.env.example` with security vars
+- [x] `cursor-mcp.example.json`, `setup.ps1`
+- [x] Legacy code in `Old/` (deprecated)
 
 ---
 
-## Phase 5 — Tests
+## Phase 5 — Tests & CI
 
-- [ ] `tests/test_session.py`
-- [ ] `tests/test_state.py`
-- [ ] Manual smoke per TEST_PLAN.md
+- [x] `tests/test_browser_core.py`
+- [x] `tests/test_browser_integration.py`
+- [x] `tests/test_security.py`
+- [x] `tests/test_mcp_smoke.py`
+- [x] `tests/test_agent.py`
+- [x] `.github/workflows/test.yml`
 
 ---
 
 ## Acceptance gate
 
-All items in MASTER_PLAN §6 acceptance column pass before marking implementation complete.
+All MASTER_PLAN §6 acceptance criteria met. See [../Implement/DELIVERABLE_RATING.md](../Implement/DELIVERABLE_RATING.md).

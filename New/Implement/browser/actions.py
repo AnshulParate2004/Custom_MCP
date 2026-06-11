@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import asyncio
-import base64
 import json
 from typing import Any
 
+from browser.audit import log_event
 from browser.config import get_settings
+from browser import guards as state_guards
 from browser.errors import BrowserError, NavigationError, NoSessionError
+from browser import security
 from browser import state as page_state
 from browser.session import get_page, is_active, new_tab
 
@@ -19,25 +21,40 @@ def ensure_session() -> None:
 
 
 async def navigate(url: str, new_tab_flag: bool = False) -> dict[str, Any]:
+    safe_url = security.validate_url(url)
+    log_event("navigate", {"url": safe_url, "new_tab": new_tab_flag})
+
     if new_tab_flag:
-        result = await new_tab(url)
+        result = await new_tab(safe_url)
         page_state.invalidate_cache()
-        return {"success": True, "url": result.get("url", url), "new_tab": True}
+        return {"success": True, "url": result.get("url", safe_url), "new_tab": True}
 
     settings = get_settings()
     page = await get_page()
+    last_error: Exception | None = None
 
-    try:
-        await page.goto(url, timeout=settings.navigation_timeout_ms, wait_until="domcontentloaded")
-        await asyncio.sleep(settings.wait_after_navigate_ms / 1000)
-    except Exception as exc:
-        raise NavigationError(f"Navigation failed: {exc}") from exc
+    for attempt in range(settings.navigate_retry_count + 1):
+        try:
+            await page.goto(
+                safe_url,
+                timeout=settings.navigation_timeout_ms,
+                wait_until="domcontentloaded",
+            )
+            await asyncio.sleep(settings.wait_after_navigate_ms / 1000)
+            page_state.invalidate_cache()
+            return {"success": True, "url": page.url, "attempt": attempt + 1}
+        except Exception as exc:
+            last_error = exc
+            if attempt < settings.navigate_retry_count:
+                await asyncio.sleep(0.5)
 
-    page_state.invalidate_cache()
-    return {"success": True, "url": page.url}
+    raise NavigationError(f"Navigation failed after retries: {last_error}") from last_error
 
 
 async def click(index: int) -> dict[str, Any]:
+    state_guards.require_fresh_state()
+    log_event("click", {"index": index})
+
     settings = get_settings()
     element = await page_state.get_element_for_index(index)
 
@@ -52,6 +69,9 @@ async def click(index: int) -> dict[str, Any]:
 
 
 async def type_text(index: int, text: str) -> dict[str, Any]:
+    state_guards.require_fresh_state()
+    log_event("type", {"index": index, "text_len": len(text)})
+
     settings = get_settings()
     element = await page_state.get_element_for_index(index)
 
@@ -73,12 +93,15 @@ async def scroll(direction: str = "down", amount: int = 500) -> dict[str, Any]:
     page = await get_page()
     delta = amount if direction == "down" else -amount
     await page.evaluate(f"window.scrollBy(0, {delta})")
+    log_event("scroll", {"direction": direction, "amount": amount})
     return {"success": True, "direction": direction, "amount": amount}
 
 
 async def evaluate(script: str) -> dict[str, Any]:
+    safe_script = security.validate_javascript(script)
     page = await get_page()
-    result = await page.evaluate(script)
+    result = await page.evaluate(safe_script)
+    log_event("evaluate", {"script_len": len(safe_script)})
     return {"success": True, "result": result}
 
 

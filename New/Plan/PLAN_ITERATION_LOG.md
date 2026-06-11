@@ -22,3 +22,15 @@ Plan iteration stops when:
 - [x] No remaining doc gaps
 
 **Further work = code implementation**, not plan loops.
+
+---
+
+## Implementation iteration (2026-06-11)
+
+| Item | Status |
+|------|--------|
+| Security, audit, guards wired | Done |
+| 19 pytest tests + GitHub Actions CI | Done |
+| setup.ps1 + cursor-mcp.example.json | Done |
+| PDFs rebuilt with New/Implement paths | Done |
+| DELIVERABLE_RATING.md ≥ 9.5 all rows | Done |

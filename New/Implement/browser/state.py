@@ -6,6 +6,7 @@ import base64
 import time
 from typing import Any
 
+from browser import guards as state_guards
 from browser.config import get_settings
 from browser.errors import ElementNotFoundError
 from browser.session import get_page
@@ -69,6 +70,7 @@ def invalidate_cache() -> None:
     global _last_snapshot, _cache_time
     _last_snapshot = None
     _cache_time = 0.0
+    state_guards.invalidate_state_observed()
 
 
 async def get_state(
@@ -116,6 +118,7 @@ async def get_state(
         "interactive_elements": list(elements),
     }
     _cache_time = now
+    state_guards.mark_state_observed()
 
     return result
 

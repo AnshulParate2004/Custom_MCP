@@ -24,6 +24,13 @@ class BrowserSettings:
     agent_max_steps: int
     litellm_model: str
     litellm_temperature: float
+    allowed_hosts: frozenset[str]
+    block_localhost: bool
+    allow_javascript: bool
+    max_script_length: int
+    audit_enabled: bool
+    audit_log_path: Path
+    navigate_retry_count: int
 
 
 def _env_bool(key: str, default: bool) -> bool:
@@ -53,8 +60,15 @@ def _env_float(key: str, default: float) -> float:
         return default
 
 
+def _parse_allowed_hosts(raw: str | None) -> frozenset[str]:
+    if not raw or not raw.strip():
+        return frozenset()
+    return frozenset(h.strip().lower() for h in raw.split(",") if h.strip())
+
+
 def get_settings() -> BrowserSettings:
     downloads = os.environ.get("BROWSER_DOWNLOADS_PATH", "~/Downloads/browser-mcp")
+    audit_dir = Path(downloads).expanduser()
     return BrowserSettings(
         headless=_env_bool("BROWSER_HEADLESS", False),
         timeout_ms=_env_int("BROWSER_TIMEOUT_MS", 30_000),
@@ -65,8 +79,15 @@ def get_settings() -> BrowserSettings:
         max_elements=_env_int("BROWSER_MAX_ELEMENTS", 200),
         max_text_per_element=_env_int("BROWSER_MAX_TEXT_PER_ELEMENT", 50),
         max_page_text_length=_env_int("BROWSER_MAX_PAGE_TEXT", 10_000),
-        downloads_path=Path(downloads).expanduser(),
+        downloads_path=audit_dir,
         agent_max_steps=_env_int("AGENT_MAX_STEPS", 25),
         litellm_model=os.environ.get("LITELLM_MODEL", "openai/gpt-4o"),
         litellm_temperature=_env_float("LITELLM_TEMPERATURE", 0.1),
+        allowed_hosts=_parse_allowed_hosts(os.environ.get("BROWSER_ALLOWED_HOSTS")),
+        block_localhost=_env_bool("BROWSER_BLOCK_LOCALHOST", True),
+        allow_javascript=_env_bool("BROWSER_ALLOW_JAVASCRIPT", True),
+        max_script_length=_env_int("BROWSER_MAX_SCRIPT_LENGTH", 5000),
+        audit_enabled=_env_bool("BROWSER_AUDIT_ENABLED", True),
+        audit_log_path=audit_dir / "audit.jsonl",
+        navigate_retry_count=_env_int("BROWSER_NAVIGATE_RETRIES", 1),
     )

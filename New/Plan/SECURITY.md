@@ -46,8 +46,9 @@ Remove from repo: `BROWSER_USE_API_KEY`, hardcoded keys in `config.json`.
 
 ---
 
-## 5. Phase 2 security (optional)
+## 5. Phase 2 security (implemented)
 
-- Host allowlist enforcement in `browser/config.py`
-- Rate limit on `browser_navigate` per session
-- Audit log of URLs visited (local JSONL)
+- [x] Host allowlist enforcement in `browser/security.py` + `BROWSER_ALLOWED_HOSTS`
+- [x] Audit log of actions (local JSONL) — `browser/audit.py`
+- [x] STALE_STATE guard in `browser/guards.py`
+- [ ] Rate limit on `browser_navigate` per session (future / ops)
